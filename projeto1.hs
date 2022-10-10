@@ -17,11 +17,11 @@ monomios = [Mono 2 'b' 3,
             Mono 10 'd' 3,
             Mono 2 'c' 2,
             Mono 4 'a' 3,
-            Mono 10 'd' 3]
+            Mono 10 'd' 0]
 
 
-monomiosNormal :: Poly
-monomiosNormal = sortPoly monomios
+monomiosSoma :: Poly
+monomiosSoma = sortPolySum monomios
 
 removeNulls :: Poly -> Poly
 removeNulls x = [a | a <- x, coef a /= 0]
@@ -38,14 +38,21 @@ mulMono a b | var a /= var b = Mono 0 'a' 1
                                   deg1 = deg a + deg b
 
 
-sortToNormalize :: Mono -> Mono -> Ordering -- ascending variable, descending degree
-sortToNormalize x y
+sortToSum :: Mono -> Mono -> Ordering -- ascending variable, descending degree
+sortToSum x y
   | var x < var y = LT
   | var x > var y = GT
   | var x == var y = flip compare (deg x) (deg y)
 
 
-sortPoly = sortBy sortToNormalize
+sortToNormalize :: Mono -> Mono -> Ordering -- descending degree, ascending variable
+sortToNormalize x y
+  | deg x < deg y = GT
+  | deg x > deg y = LT
+  | deg x == deg y = compare (var x) (var y)
+
+sortPolySum = sortBy sortToSum
+sortPolyNormalize = sortBy sortToNormalize
 
 concatPoly :: Poly -> Poly -> Poly
 concatPoly x y = x ++ y
