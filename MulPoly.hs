@@ -4,14 +4,17 @@ import Data.List (sort)
 
 import Types
 
-mulVars :: [(Char, Int)] -> [(Char, Int)] -- recebe lista concatenada das variaveis dos dois monomios
+-- Auxiliar function to multiply the variables lists, the parameter is the two variable lists concatenated
+mulVars :: [(Char, Int)] -> [(Char, Int)]
 mulVars [] = []
 mulVars [x] = [x]
 mulVars (x:y:xs) = if (fst x == fst y) then (mulVars([(fst x, snd x + snd y)] ++ xs)) else (x : mulVars (y:xs))
 
+-- Function to multiply monomyals
 mulMono :: Mono -> Mono -> Mono
 mulMono a b = Mono (coef a * coef b) (mulVars vars1)
               where vars1 = sort ((vars a) ++ (vars b))
 
+-- Function to multiply polynomials
 mulPoly :: Poly -> Poly -> Poly
 mulPoly a b = [mulMono x y | x <- a , y <- b]
