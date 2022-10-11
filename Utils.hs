@@ -5,9 +5,21 @@ import Data.Char
 
 import Types
 
+printVars :: [(Char, Int)] -> String
+printVars [] = ""
+printVars (x:xs) = "*" ++ [fst x] ++ "^" ++ show (snd x) ++ printVars xs
+
 printMono :: Mono -> String
-printMono m = s -- ++ [(fst i : "^") : show (snd i) | i <- vars m]
-              where s = show ( coef m)
+printMono m | coef m == (fromInteger (round (coef m))) = " " ++ init(init(s)) ++ printVars (vars m) ++ " "
+            | otherwise = " " ++ s ++ printVars (vars m) ++ " "
+              where s = show (abs (coef m))
+
+printPoly :: Poly -> String
+printPoly [] = ""
+printPoly (x:xs) = if((coef x) > 0) then( "+" ++ printMono x ++ printPoly xs) else ("-" ++ printMono x ++ printPoly xs)
+
+clearPrint :: String -> String
+clearPrint s = tail (tail (init s))
 
 -- Auxiliar function to check if a monomial has the variable 'c'
 containsVar :: Char -> [(Char, Int)] -> Bool

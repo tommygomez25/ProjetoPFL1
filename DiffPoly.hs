@@ -4,8 +4,8 @@ import Types
 import Utils
 
 test :: Poly
-test = [Mono 2 [('a',3)],
-        Mono 3 [('b',3), ('a',3)],
+test = [Mono 2.5 [('a',3)],
+        Mono (-3) [('b',3), ('a',3)],
         Mono 1 [('c',3)],
         Mono 3 [('a',3)]]
 
