@@ -1,6 +1,8 @@
 module Tree where
 
 import Types
+import AddPoly
+import MulPoly
 import Data.Char
 
 lexer :: String -> [Token]
@@ -54,3 +56,9 @@ parse tokens =
   case parseSumOrProdOrIntOrParenExpr tokens of
     Just (expr, []) -> expr
     _               -> error "Could not parse input"
+
+
+eval :: Expr -> Mono
+eval (MonoLit m) = Mono (coef m) (vars m)
+eval (Add expr1 expr2) = addMono (eval expr1) (eval expr2)
+eval (Mult expr1 expr2) = mulMono (eval expr1) (eval expr2)
