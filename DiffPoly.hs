@@ -2,7 +2,7 @@ module DiffPoly where
 
 import Types
 import Utils
-
+{-
 test :: Poly
 test = [Mono 2.5 [('a',3)],
         Mono (-3) [('b',3), ('a',3)],
@@ -26,3 +26,4 @@ auxCoef a m = head [ fromIntegral (snd i)*(coef m) | i <- vars m, fst i == a]
 diffPoly :: Char -> Poly -> Poly
 diffPoly _ [] = []
 diffPoly a (x:xs) = removeNulls (diffMono a x : diffPoly a xs)
+-}

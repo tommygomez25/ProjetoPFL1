@@ -9,15 +9,16 @@ printVars :: [(Char, Int)] -> String
 printVars [] = ""
 printVars (x:xs) = "*" ++ [fst x] ++ "^" ++ show (snd x) ++ printVars xs
 
-printMono :: Mono -> String
+{-printMono :: Mono -> String
 printMono m | coef m == (fromInteger (round (coef m))) = " " ++ init(init(s)) ++ printVars (vars m) ++ " "
             | otherwise = " " ++ s ++ printVars (vars m) ++ " "
-              where s = show (abs (coef m))
+              where s = show (abs (coef m))-}
 
+{-
 printPoly :: Poly -> String
 printPoly [] = ""
 printPoly (x:xs) = if((coef x) > 0) then( "+" ++ printMono x ++ printPoly xs) else ("-" ++ printMono x ++ printPoly xs)
-
+-}
 clearPrint :: String -> String
 clearPrint s = tail (tail (init s))
 

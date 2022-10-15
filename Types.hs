@@ -12,8 +12,6 @@ type Poly = [Mono]
 data Token
   = PlusTok
   | TimesTok
-  | OpenTok
-  | CloseTok
   | ExpTok
   | VarTok Char
   | IntTok Int

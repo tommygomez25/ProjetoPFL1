@@ -9,6 +9,7 @@ import AddPoly
 import MulPoly
 import DiffPoly
 import Utils
+import Tree
 
 -- Monomios p ajudar
 monomios :: Poly
