@@ -21,8 +21,16 @@ lexer str@(chr : _ ) | isDigit chr = IntTok (stringToInt digitStr) : lexer xs
     stringToInt  = foldl (\acc chr -> 10 * acc + digitToInt chr) 0
 
 -------
+parseOtherVars :: [Token] -> ([(Char, Int)], [Token])
+parseOtherVars [] = ([], [])
+parseOtherVars (TimesTok : VarTok a : ExpTok : IntTok d : TimesTok : VarTok v : restTokens) = ([(a, d)] ++ fst t, snd t)
+                                                                                              where t = parseOtherVars ([TimesTok, VarTok v] ++ restTokens)
+parseOtherVars (TimesTok : VarTok a : ExpTok : IntTok d : restTokens) = ([(a,d)], restTokens)
+
 parseIntOrExpr :: [Token] -> Maybe (Expr, [Token])
-parseIntOrExpr (IntTok n : TimesTok : VarTok a : ExpTok : IntTok m: restTokens) = Just (MonoLit (Mono n [(a,m)]), restTokens)
+parseIntOrExpr (IntTok n : TimesTok : VarTok a : ExpTok : IntTok m : TimesTok : VarTok v : restTokens) = Just (MonoLit (Mono n ([(a,m)] ++ fst t)), snd t)
+                                                                                                        where t = parseOtherVars ([TimesTok, VarTok v] ++ restTokens)
+parseIntOrExpr (IntTok n : TimesTok : VarTok a : ExpTok : IntTok m : restTokens) = Just (MonoLit (Mono n [(a,m)]), restTokens)
 parseIntOrExpr (IntTok n : restTokens) = Just (IntLit n,   restTokens)
 parseIntOrExpr tokens = Nothing
 

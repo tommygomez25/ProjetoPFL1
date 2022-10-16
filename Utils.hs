@@ -8,8 +8,8 @@ import Types
 
 printVars :: [(Char, Int)] -> String
 printVars [] = ""
-printVars (x:xs) | (snd x) == 0 = ""
-                 | (snd x) == 1 = "*" ++ [fst x]
+printVars (x:xs) | (snd x) == 0 = "" ++ printVars xs
+                 | (snd x) == 1 = "*" ++ [fst x] ++ printVars xs
                  | otherwise  = "*" ++ [fst x] ++ "^" ++ show (snd x) ++ printVars xs
 
 {-
