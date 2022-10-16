@@ -47,12 +47,16 @@ sortSum x y
 
 sortToSum = sortBy sortSum
 
-{-
+
+getExpSum :: Mono -> Int
+getExpSum m = foldl (\x y-> x+ (snd y)) 0 (vars m)
+
+
 sortNormalize :: Mono -> Mono -> Ordering
 sortNormalize x y
-  | snd (vars x) < snd (vars y) = GT
-  | snd (vars x) > snd (vars y) = LT
-  | snd (vars x) == snd (vars y) = compare (vars x) (vars y)
--}
+  | getExpSum x < getExpSum y = GT
+  | getExpSum x > getExpSum y = LT
+  | getExpSum x == getExpSum y = EQ
 
---sortToNormalize m = sortBy  (compare `on` ( length . snd)) (vars m)
+
+sortToNormalize m = sortBy sortNormalize m

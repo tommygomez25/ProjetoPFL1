@@ -34,7 +34,7 @@ testNormalizar :: Poly
 testNormalizar = [Mono 2 [('x',3)],
               Mono 1 [('y',3)],
               Mono 1 [('x',2)],
-              Mono 1 [('y',1)]]
+              Mono 1 [('y',2)]]
 
 
 menu :: IO ()
