@@ -20,11 +20,16 @@ lexer str@(chr : _ ) | isDigit chr = IntTok (stringToInt digitStr) : lexer xs
     stringToInt :: String -> Int
     stringToInt  = foldl (\acc chr -> 10 * acc + digitToInt chr) 0
 
--------
-parseIntOrExpr :: [Token] -> Maybe (Expr, [Token])
-parseIntOrExpr (IntTok n : TimesTok : VarTok a : ExpTok : IntTok m: restTokens) = Just (MonoLit (Mono n [(a,m)]), restTokens)
-parseIntOrExpr (IntTok n : restTokens) = Just (IntLit n,   restTokens)
-parseIntOrExpr tokens = Nothing
+
+parseIntOrParenExpr :: [Token] -> Maybe (Expr, [Token])
+parseIntOrParenExpr (IntTok n : TimesTok : VarTok a : ExpTok : IntTok m:TimesTok : VarTok v: restTokens) = Just (MonoLit (Mono n [(a,m)] ++ fst (parseOtherVars TimesTok: [VarTok v] ++ restTokens)), snd(parseOtherVars TimesTok: [VarTok v] ++ restTokens))
+parseIntOrParenExpr (IntTok n : TimesTok : VarTok a : ExpTok : IntTok m: restTokens) = Just (MonoLit (Mono n [(a,m)]), restTokens)
+parseIntOrParenExpr (OpenTok : restTokens1) = case parseSumOrProdOrIntOrParenExpr restTokens1 of
+                                                Just (expr, (CloseTok : restTokens2)) -> Just (expr, restTokens2)
+                                                Just _ -> Nothing -- no closing parenthesis
+                                                Nothing -> Nothing
+parseIntOrParenExpr tokens = Nothing
+
 
 
 parseProdOrIntOrExpr :: [Token] -> Maybe (Expr, [Token])
