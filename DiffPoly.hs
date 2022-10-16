@@ -9,12 +9,10 @@ test = [Mono 2 [('a',3)],
         Mono (-3) [('b',3), ('a',3)],
         Mono 1 [('c',3)],
         Mono 3 [('a',3)]]
-
 -- Function to calculate monomial derivative in order to 'a'
 diffMono :: Char -> Mono -> Mono
 diffMono a m | containsVar a (vars m) = Mono (auxCoef a m) (auxVars a m)
              | otherwise = Mono 0 [('-', 0)]
-
 -- Auxiliar function that returns the derivative of the list of variables
 auxVars :: Char -> Mono -> [(Char, Int)]
 auxVars a m = [if(fst i == a) then((fst i, (snd i) - 1)) else (i) | i <- vars m]

@@ -1,7 +1,6 @@
 module MulPoly where
 
 import Data.List (sort)
-
 import Types
 
 -- Auxiliar function to multiply the variables lists, the parameter is the two variable lists concatenated

@@ -47,12 +47,20 @@ sortSum x y
 
 sortToSum = sortBy sortSum
 
-{-
+getExpSum :: Mono -> Int
+getExpSum m = [snd a | a <- vars m]
+
+getVarOrder :: Mono -> Int
+getVarOrder m = sum[fromEnum (fst a) | a <- vars m]
+
 sortNormalize :: Mono -> Mono -> Ordering
 sortNormalize x y
-  | snd (vars x) < snd (vars y) = GT
-  | snd (vars x) > snd (vars y) = LT
-  | snd (vars x) == snd (vars y) = compare (vars x) (vars y)
--}
+  | sum1 < sum2 = GT
+  | sum1 > sum2 = LT
+  | sum1 == sum2 = compare (sumVar1) (sumVar2)
+  where sum1 = getExpSum x
+        sum2 = getExpSum y
+        sumVar1 = getVarOrder x
+        sumVar2 = getVarOrder y
 
---sortToNormalize m = sortBy  (compare `on` ( length . snd)) (vars m)
+sortToNormalize = sortBy sortNormalize
