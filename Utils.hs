@@ -64,3 +64,13 @@ sortNormalize x y
         sumVar2 = getVarOrder y
 
 sortToNormalize = sortBy sortNormalize
+
+normalizeVars :: [(Char, Int)] -> [(Char, Int)] --assumes list of vars is sorted by var
+normalizeVars [] = []
+normalizeVars [x] = [x]
+normalizeVars (x:y:xs) = if (fst x == fst y) then (normalizeVars ((fst x, snd x + snd y) : xs)) else (x : normalizeVars (y:xs))
+
+sortVars :: (Char, Int) -> (Char, Int) -> Ordering
+sortVars x y = compare (fst x) (fst y)
+
+sortByVars = sortBy sortVars
