@@ -2,16 +2,25 @@ module Utils where
 
 import Data.List (sortBy)
 import Data.Char
+import Data.Function (on)
 
 import Types
 
 printVars :: [(Char, Int)] -> String
 printVars [] = ""
-printVars (x:xs) = "*" ++ [fst x] ++ "^" ++ show (snd x) ++ printVars xs
+printVars (x:xs) | (snd x) == 0 = ""
+                 | (snd x) == 1 = "*" ++ [fst x]
+                 | otherwise  = "*" ++ [fst x] ++ "^" ++ show (snd x) ++ printVars xs
 
+{-
 printMono :: Mono -> String
 printMono m | coef m == (fromInteger (round (coef m))) = " " ++ init(init(s)) ++ printVars (vars m) ++ " "
             | otherwise = " " ++ s ++ printVars (vars m) ++ " "
+              where s = show (abs (coef m))
+-} -- dont need to worry about floats anymore
+
+printMono :: Mono -> String
+printMono m = " " ++ s ++ printVars (vars m) ++ " "
               where s = show (abs (coef m))
 
 printPoly :: Poly -> String
@@ -37,3 +46,13 @@ sortSum x y
   | vars x == vars y = compare (coef x) (coef y)
 
 sortToSum = sortBy sortSum
+
+{-
+sortNormalize :: Mono -> Mono -> Ordering
+sortNormalize x y
+  | snd (vars x) < snd (vars y) = GT
+  | snd (vars x) > snd (vars y) = LT
+  | snd (vars x) == snd (vars y) = compare (vars x) (vars y)
+-}
+
+--sortToNormalize m = sortBy  (compare `on` ( length . snd)) (vars m)
