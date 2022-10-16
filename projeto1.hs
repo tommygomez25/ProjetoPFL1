@@ -30,33 +30,37 @@ pSomavel = [Mono 3 [('b',3), ('a',3)],
             Mono (-2) [('a',3)],
             Mono 3 [('c',3)]]
 
-{-
+testNormalizar :: Poly
+testNormalizar = [Mono 2 [('x',3)],
+              Mono 1 [('y',3)],
+              Mono 1 [('x',2)],
+              Mono 1 [('y',1)]]
+
+
 menu :: IO ()
 menu = do
   putStrLn "Qual a operação?"
-  putStr "1-Normalizar polinómio\n2-Adicionar polinómios\n3-Multiplicar polinómios\n4-Derivada de polinómio\n"
+  putStr "1-Normalizar polinómio\n2-Derivada de polinómio\n"
   option <- getLine
   case option of
-    "1" -> askPoly
-    "2" -> askPolys
-    "3" -> askPolys
-    "4" -> askPoly
+    --"1" -> askPoly
+    "2" -> askVarAndPoly
     _ -> do  putStrLn "Opção inválida";
               menu
 
-
+{-
 askPoly :: IO ()
 askPoly = do
   putStrLn "Qual é o polinómio?\n"
   p <- getLine
   return
-
-
-askPolys :: IO ()
-askPolys = do
-  putStrLn "Qual é o primeiro polinómio?"
-  p1 <- getLine
-  putStrLn "Qual é o segundo polinómio?"
-  p2 <- getLine
-  return
 -}
+
+askVarAndPoly :: IO ()
+askVarAndPoly = do
+  putStrLn "Qual é o polinómio?"
+  p1 <- getLine
+  putStrLn "Derivar em ordem a que variável?"
+  p2 <- getChar
+  putStrLn "O resultado é:"
+  putStrLn (clearPrint (printPoly (diffPoly (p2) (addPoly (sortToSum (eval (parse (lexer p1))))))))
