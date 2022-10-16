@@ -20,14 +20,7 @@ lexer str@(chr : _ ) | isDigit chr = IntTok (stringToInt digitStr) : lexer xs
     stringToInt :: String -> Int
     stringToInt  = foldl (\acc chr -> 10 * acc + digitToInt chr) 0
 
-parseOtherVars :: [Token] -> Maybe ([(Char, Int)], [Token])
-parseOtherVars (TimesTok : VarTok a : ExpTok : IntTok m : TimesTok : VarTok v: xs) = ([(a,m)] ++ x, y)
-                                                                                    where  (x,y) = parseOtherVars(TimesTok : [VarTok v] ++ xs)
-parseOtherVars (TimesTok : VarTok a : ExpTok : IntTok m : xs) = ([(a,m)], xs)
-parseOtherVars tokens = Nothing
 
--------
-<<<<<<< HEAD
 parseIntOrParenExpr :: [Token] -> Maybe (Expr, [Token])
 parseIntOrParenExpr (IntTok n : TimesTok : VarTok a : ExpTok : IntTok m:TimesTok : VarTok v: restTokens) = Just (MonoLit (Mono n [(a,m)] ++ fst (parseOtherVars TimesTok: [VarTok v] ++ restTokens)), snd(parseOtherVars TimesTok: [VarTok v] ++ restTokens))
 parseIntOrParenExpr (IntTok n : TimesTok : VarTok a : ExpTok : IntTok m: restTokens) = Just (MonoLit (Mono n [(a,m)]), restTokens)
@@ -36,12 +29,7 @@ parseIntOrParenExpr (OpenTok : restTokens1) = case parseSumOrProdOrIntOrParenExp
                                                 Just _ -> Nothing -- no closing parenthesis
                                                 Nothing -> Nothing
 parseIntOrParenExpr tokens = Nothing
-=======
-parseIntOrExpr :: [Token] -> Maybe (Expr, [Token])
-parseIntOrExpr (IntTok n : TimesTok : VarTok a : ExpTok : IntTok m: restTokens) = Just (MonoLit (Mono n [(a,m)]), restTokens)
-parseIntOrExpr (IntTok n : restTokens) = Just (IntLit n,   restTokens)
-parseIntOrExpr tokens = Nothing
->>>>>>> b2adf34e62683a36b99c8d821606908c4737cebf
+
 
 
 parseProdOrIntOrExpr :: [Token] -> Maybe (Expr, [Token])
