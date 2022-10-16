@@ -48,10 +48,10 @@ sortSum x y
 sortToSum = sortBy sortSum
 
 getExpSum :: Mono -> Int
-getExpSum m = [snd a | a <- vars m]
+getExpSum m = sum [snd a | a <- vars m]
 
 getVarOrder :: Mono -> Int
-getVarOrder m = sum[fromEnum (fst a) | a <- vars m]
+getVarOrder m = sum [fromEnum (fst a) | a <- vars m]
 
 sortNormalize :: Mono -> Mono -> Ordering
 sortNormalize x y
