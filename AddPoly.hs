@@ -8,8 +8,14 @@ addMono a b = if (vars (head a) == vars (head b)) then [Mono (coef (head a) + co
 
 addMonoKnowingTheyCanBeAdded :: Mono -> Mono -> Mono
 addMonoKnowingTheyCanBeAdded a b = Mono (coef a + coef b) (vars a)
+
+isExponentZero :: Mono -> Mono -> Bool
+isExponentZero a b = foldl (&&) True list
+                        where list = [True | x <- vars a, snd x == 0] ++ [True | y <- vars b, snd y == 0]
 -- Function to add two polynomials, the parameter is the two polynomials concatenated and ordered by variable and degree
 addPoly :: Poly -> Poly
 addPoly [] = []
 addPoly [x] = [x]
-addPoly (x:y:xs) = if(vars x == vars y) then (addPoly ((addMonoKnowingTheyCanBeAdded x y):xs) ) else (x : (addPoly (y:xs)))
+addPoly (x:y:xs) | isExponentZero x y = addPoly ((Mono (coef x + coef y) ([('-',0)])) : xs)
+                 | vars x == vars y = addPoly ((addMonoKnowingTheyCanBeAdded x y):xs)
+                 | otherwise = (x: (addPoly (y:xs)))
