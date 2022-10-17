@@ -11,7 +11,7 @@ addMonoKnowingTheyCanBeAdded a b = Mono (coef a + coef b) (vars a)
 
 isExponentZero :: Mono -> Mono -> Bool
 isExponentZero a b = foldl (&&) True list
-                        where list = [True | x <- vars a, snd x == 0] ++ [True | y <- vars b, snd y == 0]
+                        where list = [snd x == 0 | x <- vars a] ++ [snd y == 0 | y <- vars b]
 -- Function to add two polynomials, the parameter is the two polynomials concatenated and ordered by variable and degree
 addPoly :: Poly -> Poly
 addPoly [] = []
