@@ -61,3 +61,9 @@ askVarAndPoly = do
   p2 <- getChar
   putStrLn "O resultado é:"
   putStrLn (clearPrint (printPoly (diffPoly (p2) (addPoly (sortToSum (eval (parse (lexer p1))))))))
+
+diff :: Char -> String -> IO()
+diff a s = putStrLn (clearPrint (printPoly (diffPoly (a) (addPoly (sortToSum (eval (parse (lexer s))))))))
+
+calculator :: String -> IO()
+calculator s = putStrLn (clearPrint (printPoly (sortToNormalize (addPoly(sortToSum (filterExpZero(eval (parse (lexer s)))))))))

@@ -3,13 +3,16 @@ module Tree where
 import Types
 import AddPoly
 import MulPoly
+import Utils
 import Data.Char
+
 
 lexer :: String -> [Token]
 lexer [] = []
 lexer ('+' : xs) = PlusTok : lexer xs
 lexer ('*' : xs) = TimesTok : lexer xs
 lexer ('^' : xs) = ExpTok : lexer xs
+lexer ('-' : xs) = MinusTok : lexer xs
 lexer (chr : xs) | isSpace chr = lexer xs -- ignores whitespaces, newlines and tab characters
                  | isAlpha chr = VarTok chr : lexer xs
 
@@ -27,10 +30,17 @@ parseOtherVars (TimesTok : VarTok a : ExpTok : IntTok d : TimesTok : VarTok v : 
                                                                                               where t = parseOtherVars ([TimesTok, VarTok v] ++ restTokens)
 parseOtherVars (TimesTok : VarTok a : ExpTok : IntTok d : restTokens) = ([(a,d)], restTokens)
 
+
 parseIntOrExpr :: [Token] -> Maybe (Expr, [Token])
+parseIntOrExpr (MinusTok : IntTok n : TimesTok : VarTok a : ExpTok : IntTok m : TimesTok : VarTok v : restTokens) = Just (MonoLit (Mono (toNegative n) ([(a,m)] ++ fst t)), snd t)
+                                                                                                        where t = parseOtherVars ([TimesTok, VarTok v] ++ restTokens)
 parseIntOrExpr (IntTok n : TimesTok : VarTok a : ExpTok : IntTok m : TimesTok : VarTok v : restTokens) = Just (MonoLit (Mono n ([(a,m)] ++ fst t)), snd t)
                                                                                                         where t = parseOtherVars ([TimesTok, VarTok v] ++ restTokens)
+
+parseIntOrExpr (MinusTok : IntTok n : TimesTok : VarTok a : ExpTok : IntTok m : restTokens) = Just (MonoLit (Mono (toNegative n) [(a,m)]), restTokens)
 parseIntOrExpr (IntTok n : TimesTok : VarTok a : ExpTok : IntTok m : restTokens) = Just (MonoLit (Mono n [(a,m)]), restTokens)
+
+parseIntOrExpr (MinusTok : IntTok n : restTokens) = Just (IntLit (toNegative n),   restTokens)
 parseIntOrExpr (IntTok n : restTokens) = Just (IntLit n,   restTokens)
 parseIntOrExpr tokens = Nothing
 
@@ -50,6 +60,10 @@ parseSumOrProdOrIntOrExpr tokens
   = case parseProdOrIntOrExpr tokens of
       Just (expr1, (PlusTok : restTokens1)) ->
           case parseSumOrProdOrIntOrExpr restTokens1 of
+            Just (expr2, restTokens2) -> Just (Add expr1 expr2, restTokens2)
+            Nothing                   -> Nothing
+      Just (expr1, (MinusTok : restTokens1)) ->
+          case parseSumOrProdOrIntOrExpr (MinusTok : restTokens1) of
             Just (expr2, restTokens2) -> Just (Add expr1 expr2, restTokens2)
             Nothing                   -> Nothing
       result -> result

@@ -13,6 +13,7 @@ data Token
   = PlusTok
   | TimesTok
   | ExpTok
+  | MinusTok
   | VarTok Char
   | IntTok Int
   | MonoTok Mono

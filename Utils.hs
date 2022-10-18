@@ -19,16 +19,21 @@ printMono m | coef m == (fromInteger (round (coef m))) = " " ++ init(init(s)) ++
               where s = show (abs (coef m))
 -} -- dont need to worry about floats anymore
 
+toNegative :: Int -> Int
+toNegative n = n * (-1)
+
 printMono :: Mono -> String
 printMono m = " " ++ s ++ printVars (vars m) ++ " "
               where s = show (abs (coef m))
 
 printPoly :: Poly -> String
 printPoly [] = ""
-printPoly (x:xs) = if((coef x) > 0) then( "+" ++ printMono x ++ printPoly xs) else ("-" ++ printMono x ++ printPoly xs)
+printPoly (x:xs) = if((coef x) >= 0) then( "+" ++ printMono x ++ printPoly xs) else ("-" ++ printMono x ++ printPoly xs)
 
 clearPrint :: String -> String
-clearPrint s = tail (tail (init s))
+clearPrint "" = "0"
+clearPrint s | length s > 0 && s !! 0 == '-' = init s
+             | otherwise = tail(tail (init s)) --remove first '+'
 
 -- Auxiliar function to check if a monomial has the variable 'c'
 containsVar :: Char -> [(Char, Int)] -> Bool

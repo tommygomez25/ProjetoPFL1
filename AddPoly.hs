@@ -4,7 +4,7 @@ import Types
 
 -- Function to add two monomyals (assumes they are addable based on the condition used in addPoly)
 addMono :: [Mono] -> [Mono] -> [Mono]
-addMono a b = if (vars (head a) == vars (head b)) then [Mono (coef (head a) + coef (head b)) (vars (head a))] else a++b
+addMono a b = if (vars (head a) == vars (head b)) then ([Mono (coef (head a) + coef (head b)) (vars (head a))] ++ tail a ++ tail b) else a++b
 
 addMonoKnowingTheyCanBeAdded :: Mono -> Mono -> Mono
 addMonoKnowingTheyCanBeAdded a b = Mono (coef a + coef b) (vars a)
