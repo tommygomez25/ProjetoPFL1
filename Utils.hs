@@ -12,13 +12,6 @@ printVars (x:xs) | (snd x) == 0 = "" ++ printVars xs
                  | (snd x) == 1 = "*" ++ [fst x] ++ printVars xs
                  | otherwise  = "*" ++ [fst x] ++ "^" ++ show (snd x) ++ printVars xs
 
-{-
-printMono :: Mono -> String
-printMono m | coef m == (fromInteger (round (coef m))) = " " ++ init(init(s)) ++ printVars (vars m) ++ " "
-            | otherwise = " " ++ s ++ printVars (vars m) ++ " "
-              where s = show (abs (coef m))
--} -- dont need to worry about floats anymore
-
 toNegative :: Int -> Int
 toNegative n = n * (-1)
 
