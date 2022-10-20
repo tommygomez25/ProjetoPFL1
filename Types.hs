@@ -19,10 +19,6 @@ data Token
   | MonoTok Mono
   deriving (Show)
 
-data BinaryTree a
-  = Node a (BinaryTree a) (BinaryTree a)
-  | Leaf
-
 data Expr
   = MonoLit Mono
   | VarLit Char
