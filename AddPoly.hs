@@ -4,10 +4,11 @@ import Types
 import Utils
 import Data.List(sort)
 
--- Function to add two monomyals (assumes they are addable based on the condition used in addPoly)
+-- Function to add two monomyals
 addMono :: [Mono] -> [Mono] -> [Mono]
 addMono a b = if (vars (head a) == vars (head b)) then ([Mono (coef (head a) + coef (head b)) (vars (head a))] ++ tail a ++ tail b) else a++b
 
+-- Function to add two monomyals know they can be added
 addMonoCBA :: Mono -> Mono -> Mono
 addMonoCBA a b = Mono (coef a + coef b) (vars a)
 

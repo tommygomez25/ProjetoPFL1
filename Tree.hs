@@ -44,6 +44,7 @@ parseIntOrExpr (IntTok n : TimesTok : VarTok a : ExpTok : IntTok m : TimesTok : 
                                                                                                         where t = parseOtherVars ([TimesTok, VarTok v] ++ restTokens)
 parseIntOrExpr (IntTok n : TimesTok : VarTok a : TimesTok : VarTok v : restTokens) = Just (MonoLit (Mono n ([(a,1)] ++ fst t)), snd t)
                                                                                                         where t = parseOtherVars ([TimesTok, VarTok v] ++ restTokens)
+
 parseIntOrExpr (MinusTok : IntTok n : TimesTok : VarTok a : ExpTok : IntTok m : restTokens) = Just (MonoLit (Mono (toNegative n) [(a,m)]), restTokens)
 parseIntOrExpr (MinusTok : IntTok n : TimesTok : VarTok a : restTokens) = Just (MonoLit (Mono (toNegative n) [(a,1)]), restTokens)
 parseIntOrExpr (IntTok n : TimesTok : VarTok a : ExpTok : IntTok m : restTokens) = Just (MonoLit (Mono n [(a,m)]), restTokens)
@@ -51,6 +52,9 @@ parseIntOrExpr (IntTok n : TimesTok : VarTok a : restTokens) = Just (MonoLit (Mo
 
 parseIntOrExpr (MinusTok : IntTok n : restTokens) = Just (IntLit (toNegative n),   restTokens)
 parseIntOrExpr (IntTok n : restTokens) = Just (IntLit n,   restTokens)
+parseIntOrExpr (MinusTok : VarTok a : restTokens) = Just (MonoLit (Mono (-1)[(a,1)]),   restTokens)
+parseIntOrExpr (VarTok a : restTokens) = Just (MonoLit(Mono 1 [(a,1)]),   restTokens)
+
 parseIntOrExpr tokens = Nothing
 
 

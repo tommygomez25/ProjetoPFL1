@@ -1,8 +1,7 @@
 module Utils where
 
-import Data.List (sortBy)
+import Data.List (sortBy,sort)
 import Data.Char
-import Data.Function (on)
 
 import Types
 
@@ -69,6 +68,9 @@ normalizeVars :: [(Char, Int)] -> [(Char, Int)] --assumes list of vars is sorted
 normalizeVars [] = []
 normalizeVars [x] = [x]
 normalizeVars (x:y:xs) = if (fst x == fst y) then (normalizeVars ((fst x, snd x + snd y) : xs)) else (x : normalizeVars (y:xs))
+
+normalizePoly :: Poly -> Poly
+normalizePoly m = [Mono (coef x) (normalizeVars (sort (vars x))) | x <- m]
 
 sortVars :: (Char, Int) -> (Char, Int) -> Ordering
 sortVars x y = compare (fst x) (fst y)
