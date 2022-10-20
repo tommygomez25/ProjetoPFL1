@@ -18,9 +18,9 @@ monomios = [Mono 2 [('a',3)],
             Mono 3 [('a',3)]]
 testProduto :: Poly
 testProduto = [Mono 2 [('x',2)],
-              Mono 1 [('x',1)],
-              Mono 1 [('y',2)],
-              Mono 1 [('x',1)]]
+              Mono 1 [('x',3)],
+              Mono 1 [('y',3)],
+              Mono 1 [('x',3)]]
 pSomavel :: Poly
 pSomavel = [Mono 3 [('b',3), ('a',3)],
             Mono 2 [('a',3)],
@@ -67,3 +67,10 @@ diff a s = putStrLn (clearPrint (printPoly (diffPoly (a) (addPoly (sortToSum (ev
 
 calculator :: String -> IO()
 calculator s = putStrLn (clearPrint (printPoly (sortToNormalize (addPoly(sortToSum (filterExpZero(eval (parse (lexer s)))))))))
+
+
+sumP :: String -> String -> String
+sumP s1 s2= clearPrint( printPoly ( removeNulls(filterExpZero(sortToNormalize (addPoly(sortToSum(somaP ( filterExpZero(eval (parse (lexer s1)))) ( filterExpZero(eval (parse (lexer s2)))))))))))
+
+mulP :: String -> String -> String
+mulP s1 s2 = clearPrint( printPoly ( removeNulls(filterExpZero(sortToNormalize (addPoly(sortToSum(multiplyP ( filterExpZero(eval (parse (lexer s1)))) ( filterExpZero(eval (parse (lexer s2)))))))))))

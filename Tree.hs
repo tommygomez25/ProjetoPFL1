@@ -28,17 +28,26 @@ parseOtherVars :: [Token] -> ([(Char, Int)], [Token])
 parseOtherVars [] = ([], [])
 parseOtherVars (TimesTok : VarTok a : ExpTok : IntTok d : TimesTok : VarTok v : restTokens) = ([(a, d)] ++ fst t, snd t)
                                                                                               where t = parseOtherVars ([TimesTok, VarTok v] ++ restTokens)
+parseOtherVars (TimesTok : VarTok a : TimesTok : VarTok v : restTokens) = ([(a, 1)] ++ fst t, snd t)
+                                                                                              where t = parseOtherVars ([TimesTok, VarTok v] ++ restTokens)
+
 parseOtherVars (TimesTok : VarTok a : ExpTok : IntTok d : restTokens) = ([(a,d)], restTokens)
+parseOtherVars (TimesTok : VarTok a : restTokens) = ([(a,1)], restTokens)
 
 
 parseIntOrExpr :: [Token] -> Maybe (Expr, [Token])
 parseIntOrExpr (MinusTok : IntTok n : TimesTok : VarTok a : ExpTok : IntTok m : TimesTok : VarTok v : restTokens) = Just (MonoLit (Mono (toNegative n) ([(a,m)] ++ fst t)), snd t)
                                                                                                         where t = parseOtherVars ([TimesTok, VarTok v] ++ restTokens)
+parseIntOrExpr (MinusTok : IntTok n : TimesTok : VarTok a : TimesTok : VarTok v : restTokens) = Just (MonoLit (Mono (toNegative n) ([(a,1)] ++ fst t)), snd t)
+                                                                                                      where t = parseOtherVars ([TimesTok, VarTok v] ++ restTokens)
 parseIntOrExpr (IntTok n : TimesTok : VarTok a : ExpTok : IntTok m : TimesTok : VarTok v : restTokens) = Just (MonoLit (Mono n ([(a,m)] ++ fst t)), snd t)
                                                                                                         where t = parseOtherVars ([TimesTok, VarTok v] ++ restTokens)
-
+parseIntOrExpr (IntTok n : TimesTok : VarTok a : TimesTok : VarTok v : restTokens) = Just (MonoLit (Mono n ([(a,1)] ++ fst t)), snd t)
+                                                                                                        where t = parseOtherVars ([TimesTok, VarTok v] ++ restTokens)
 parseIntOrExpr (MinusTok : IntTok n : TimesTok : VarTok a : ExpTok : IntTok m : restTokens) = Just (MonoLit (Mono (toNegative n) [(a,m)]), restTokens)
+parseIntOrExpr (MinusTok : IntTok n : TimesTok : VarTok a : restTokens) = Just (MonoLit (Mono (toNegative n) [(a,1)]), restTokens)
 parseIntOrExpr (IntTok n : TimesTok : VarTok a : ExpTok : IntTok m : restTokens) = Just (MonoLit (Mono n [(a,m)]), restTokens)
+parseIntOrExpr (IntTok n : TimesTok : VarTok a : restTokens) = Just (MonoLit (Mono n [(a,1)]), restTokens)
 
 parseIntOrExpr (MinusTok : IntTok n : restTokens) = Just (IntLit (toNegative n),   restTokens)
 parseIntOrExpr (IntTok n : restTokens) = Just (IntLit n,   restTokens)
@@ -80,3 +89,6 @@ eval (MonoLit m) = [Mono (coef m) (vars m)]
 eval (IntLit n) = [Mono n [('-',0)]]
 eval (Add expr1 expr2) = addMono (eval expr1) (eval expr2)
 eval (Mult expr1 expr2) = mulMono (eval expr1) (eval expr2)
+
+parseP :: String -> Poly
+parseP s = eval (parse (lexer(s)))

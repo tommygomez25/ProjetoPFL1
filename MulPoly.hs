@@ -14,6 +14,10 @@ mulMono :: [Mono] -> [Mono] -> [Mono]
 mulMono a b = [Mono (coef (head a) * coef(head b)) (mulVars vars1)]
               where vars1 = sort ((vars (head a)) ++ (vars (head b)))
 
+mulMono' :: Mono -> Mono -> Mono
+mulMono' a b = Mono ((coef a) * (coef b)) (mulVars vars1)
+                where vars1 = sort (vars a ++ vars b)
+
 -- Function to multiply polynomials
---mulPoly :: Poly -> Poly -> Poly
---mulPoly a b = [mulMono x y | x <- a , y <- b]
+multiplyP :: Poly -> Poly -> Poly
+multiplyP a b = [mulMono' x y | x <- a , y <- b]

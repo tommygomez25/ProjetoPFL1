@@ -6,6 +6,7 @@ import Data.Function (on)
 
 import Types
 
+
 printVars :: [(Char, Int)] -> String
 printVars [] = ""
 printVars (x:xs) | (snd x) == 0 = "" ++ printVars xs
@@ -27,6 +28,7 @@ clearPrint :: String -> String
 clearPrint "" = "0"
 clearPrint s | length s > 0 && s !! 0 == '-' = init s
              | otherwise = tail(tail (init s)) --remove first '+'
+
 
 -- Auxiliar function to check if a monomial has the variable 'c'
 containsVar :: Char -> [(Char, Int)] -> Bool
@@ -72,3 +74,11 @@ sortVars :: (Char, Int) -> (Char, Int) -> Ordering
 sortVars x y = compare (fst x) (fst y)
 
 sortByVars = sortBy sortVars
+
+cleanVarsWithExpZero:: [(Char,Int)] -> [(Char,Int)]
+cleanVarsWithExpZero l | length auxList == 0 = [('-',0)]
+                       | otherwise = auxList
+                          where auxList = [x | x<-l, snd x /= 0]
+
+filterExpZero :: Poly -> Poly
+filterExpZero p = [Mono (coef x) (cleanVarsWithExpZero (vars x)) | x <- p]
