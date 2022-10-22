@@ -20,12 +20,14 @@ printMono m = " " ++ s ++ printVars (vars m) ++ " "
               where s = show (abs (coef m))
 
 printMonoCoef1 :: Mono -> String
-printMonoCoef1 m | coef m == 1 = " " ++ tail (printVars (vars m)) ++ " "
-                 | coef m == (-1) =  " - " ++ tail (printVars (vars m)) ++ " "
+printMonoCoef1 m | coef m == 1 = " " ++ (drop 1 (printVars (vars m))) ++ " "
+                 | coef m == (-1) =  " - " ++ (drop 1 (printVars (vars m))) ++ " "
 
 printPoly :: Poly -> String
 printPoly [] = ""
-printPoly (x:xs) = if((coef x) > 1) then( "+" ++ printMono x ++ printPoly xs) else if(abs(coef x) == 1) then ( "+" ++ printMonoCoef1 x ++ printPoly xs) else ("-" ++ printMono x ++ printPoly xs)
+printPoly (x:xs) | ((abs(coef x) == 1) && fst (head(vars x)) /= '-') = "+" ++ printMonoCoef1 x ++ printPoly xs
+                 | coef x >= 1 = "+" ++ printMono x ++ printPoly xs
+                 | otherwise =  "-" ++ printMono x ++ printPoly xs
 
 clearPrint :: String -> String
 clearPrint "" = "0"
