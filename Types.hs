@@ -2,7 +2,7 @@ module Types where
 
 data Mono = Mono
   { coef :: Int,
-    vars :: [(Char,Int)] -- coef , [variable, degree]
+    vars :: [(Char,Int)] -- coef , [(variable, degree)]
   }
   deriving (Show, Eq)
 

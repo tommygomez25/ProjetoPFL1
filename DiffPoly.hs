@@ -7,11 +7,12 @@ import Utils
 diffMono :: Char -> Mono -> Mono
 diffMono a m | containsVar a (vars m) = Mono (auxCoef a m) (auxVars a m)
              | otherwise = Mono 0 [('-', 0)]
--- Auxiliar function that returns the derivative of the list of variables
+
+-- Auxiliar function that returns the derivative of the list of variables of a monomial
 auxVars :: Char -> Mono -> [(Char, Int)]
 auxVars a m = [if(fst i == a) then((fst i, (snd i) - 1)) else (i) | i <- vars m]
 
--- Auxiliar function that returns the new monomyal coefficient according to its derivative (old_coeficient * derivative_variable_degree)
+-- Auxiliar function that returns the new monomial coefficient according to its derivative (old_coeficient * derivative_variable_degree)
 auxCoef :: Char -> Mono -> Int
 auxCoef a m = head [ (snd i)*(coef m) | i <- vars m, fst i == a]
 
